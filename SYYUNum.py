@@ -11,7 +11,7 @@ def index():
     fist_url = vnp.channels()[0].hdir
     return  redirect(fist_url)
 
-@app.route('/<channel>/<brand>/<stat>')
+@app.route('/s/<channel>/<brand>/<stat>')
 def statweb(channel, brand, stat):
     context = {
         'channels': vnp.channels(),

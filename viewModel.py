@@ -44,7 +44,7 @@ class viewNavProperty(object):
         self._stats = []
         if self._cndict[channel]['stat']:
             for key,value in self._cndict[channel]['stat'].items():
-                hdir = '/' + channel + '/' + brand + '/' + key
+                hdir = '/s/' + channel + '/' + brand + '/' + key
                 ve = viewElement(key, hdir)
                 self._stats.append(ve)
         else:
