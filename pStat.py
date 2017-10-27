@@ -15,10 +15,6 @@ def statSum( data , colNames , dataNames ):
     dns = statChangeListType(dataNames)
     return data.loc[ : , cns + dns ].groupby(cns).sum()
 
-def statAve( data , newColName , fName , sName ):
-    data[newColName] = data[fName] / data[sName]
-    return data
-
 def statCount( data ,  colNames , dataNames ):
     cns = statChangeListType(colNames)
     dns = statChangeListType(dataNames)
