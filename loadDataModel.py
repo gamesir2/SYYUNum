@@ -8,7 +8,7 @@ import pandas as pd
 import pStat
 
 class baseData(object):
-    def __init__( self , path , dataSource ):
+    def __init__(self, path, dataSource):
         self._dataSource = dataSource
         self._cList = {'年度':'int64','月份':'int64','零售吊牌金额':'float64'}
         self._path = path
@@ -37,7 +37,7 @@ class baseData(object):
         self.data = self.bdOutPutResult ( self._path )
     
     def bdPathMesh( self , path ):
-        fullPath = path + '/' + self._dataSource
+        fullPath = path + '\\' + self._dataSource
         return fullPath
 
     def bdOutPutResult ( self , path ):
@@ -55,8 +55,8 @@ class baseData(object):
 
 
 class dataStat(object):
-    def __init__( self , bData ):
-        self._bData = bData
+    def __init__( self , path, dataSource):
+        self._bData = baseData(path, dataSource)
 
     @property
     def bData( self ):
@@ -69,13 +69,28 @@ class dataStat(object):
     def dsSearch( self , colNames ):
         return pStat.statSearch( self._sData , colNames )
     
-    def dsSum( self , colNames , dataNames):
+    def dsSum( self , colNames , dataNames ):
         self._sData = pStat.statSum(self._bData.data , colNames , dataNames)
         return self.sData
     
-    def dsAve( self , colNames, fName , sName , newColName):
-        self.dsSum(colNames , [ sName , fName ])
-        self._sData[newColName] =  self._sData[fName] / self._sData[sName]
+    def dsCal( self , newDataName , baseDataNames , datatypes):
+        evalstr = 'self._sData[newDataName]='
+        i = 0
+        for baseDataName in baseDataNames :
+            evalstr += 'self._sData[\''+baseDataName +'\']'
+            if len(datatypes)>i:
+                evalstr += datatypes[i]
+            i += 1
+        exec(evalstr)
+        return self.sData
+
+    def dsLoc(self,colNames,newDataNames):
+        self._sData = self.sData.loc[ : , colNames + newDataNames ]
+        return self.sData
+
+    def dsReName(self, newDataName, baseDataName):
+        if newDataName != baseDataName:
+            self._sData[newDataName] = self.sData[baseDataName]
         return self.sData
     
     def dsCount( self , colNames ):
@@ -92,12 +107,12 @@ class dataStat(object):
 
 if __name__=='__main__':
     path = r'C:\Users\xbproj02\Desktop\SM'
-    bd = baseData(path , '小类.xlsx')
-    ds = dataStat(bd)
+    ds = dataStat(path , '小类.xlsx')
     colNames = ['年度','月份','店仓区域名称']
     dataNames = ['零售数量','零售金额', '零售吊牌金额']
     #ds.dsSum(colNames , dataNames)
     ds.dsSum(colNames , dataNames)
-    print(ds.dsRank('零售金额' , rankCount=10))
+    print(ds.dsCal('平均数',['零售金额','零售数量',],['/']))
+    print(ds.dsDel(dataNames))
     #a = pStat.statSum(bd.data , colNames , dataNames)
     #print(pStat.statSearch(a,[2015,1.0,'上海']))
