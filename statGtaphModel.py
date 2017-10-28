@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import loadDataModel as ldm
 import pStat
-from sqlalchemy import create_engine
 
 '''
 sdataType类属性解析（用于计算获取数据）:
@@ -37,14 +36,13 @@ dataStatGraphProperty类属性解析（）:
     sdatatype：视图数据类型(sdataType or list（sdataType）)
 '''
 class dataStatGraphProperty(object):
-    def __init__(self , dataDir, sType , series , category , *sDataTypes:sDataType):
+    def __init__(self , dataDir, sType , series , category , sDataType:sDataType):
         self._dataDir = dataDir
         self._sType = sType
         self._series = series
         self._category = category
-        self._sDataTypes = list(sDataTypes)
-        self._allBaseDataNames = []
-        self._allNewDataNames = []
+        self._sDataType = sDataType
+        self._statData = None
 
     @property
     def dataDir( self ):
@@ -63,30 +61,29 @@ class dataStatGraphProperty(object):
         return self._category
 
     @property
-    def sDataTypes( self ):
-        return self._sDataTypes
+    def sDataType( self ):
+        return self._sDataType
 
     @property
-    def allBaseDataNames(self):
-        if self._allBaseDataNames:
-            return self._allBaseDataNames
-        else:
-            bds = []
-            for sdt in self.sDataTypes:
-                bds += sdt.baseDataNames
-            self._allBaseDataNames = list(set(bds))
-            return self._allBaseDataNames
+    def statData(self):
+        return self._statData
 
-    @property
-    def allNewDataNames(self):
-        if self._allNewDataNames:
-            return self._allNewDataNames
+    @statData.setter
+    def statData(self,value):
+        self._statData = value
+
+    def dataGet(self,path,options):
+        sdt = self.sDataType
+        self._statData = ldm.dataStat(path, self.dataDir)
+        colNames = options + [self.series, self.category]
+        dataNames = sdt.baseDataNames
+        self._statData.dsSum(colNames, dataNames)
+        if sdt.dataType:
+            self._statData.dsCal(sdt.newDataName, sdt.baseDataNames, sdt.dataType)
         else:
-            nds = []
-            for sdt in self.sDataTypes:
-                nds.append(sdt.newDataName)
-            self._allNewDataNames = nds
-            return self._allNewDataNames
+            self._statData.dsReName(sdt.newDataName, sdt.baseDataNames)
+        self._statData.dsLoc(colNames, sdt.newDataName)
+
 
 
 
@@ -106,23 +103,10 @@ class dsgpGroup(object):
     def append(self , dsgp):
         self._dsgps.append(dsgp)
 
-    def dataView(self, path, firstnam):
+    def groupViewRenderEmbed(self, path):
+
         pass
 
-    def dataGet(self, path, firstname):
+    def groupDataGet(self, path):
         for dsgp in self.dsgps:
-            ds = ldm.dataStat(path, dsgp.dataDir)
-            colNames = self.options + [dsgp.sType , dsgp.series]
-            dataNames = dsgp.allBaseDataNames
-            ds.dsSum(colNames,dataNames)
-            for sdt in dsgp.sDataTypes:
-                if sdt.dataType:
-                    ds.dsCal(sdt.newDataName,sdt.baseDataNames,sdt.dataType)
-                else:
-                    ds.dsReName(sdt.newDataName,sdt.baseDataNames)
-            ds.dsLoc(colNames,dsgp.allNewDataNames)
-
-
-    def toSql(self, name, data):
-        conn = create_engine('mysql+mysqldb://root:password@localhost:3306/databasename?charset=utf8')
-        data.to_sql(name, conn, if_exists='replace')
+            dsgp.dataGet(path,self.options)

@@ -51,14 +51,13 @@ class viewNavProperty(object):
             self._stats.append(viewElement('null','/NULL'))
         return self._stats
 
-    def statViews(self, channel, brand , stat):
+    def statViewsRenderEmbed(self, channel, brand , stat):
+        views_render_embed = ''
         path = r'C:\Users\xbproj02\Desktop'
         tPath = path +'\\'+ channel + '\\' + brand
-        firstname = channel + brand + stat
         for dg in self._cndict[channel]['stat'][stat]:
-            dg.dataView(tPath , firstname)
-
-
+            views_render_embed += dg.groupViewRenderEmbed(tPath) + '\n'
+        return views_render_embed
 
 
 if __name__ == '__main__':

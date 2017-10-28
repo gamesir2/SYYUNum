@@ -106,13 +106,12 @@ class dataStat(object):
 
 
 if __name__=='__main__':
-    path = r'C:\Users\xbproj02\Desktop\SM'
+    path = r'C:\Users\xbproj02\Desktop\ZYXS\SM'
     ds = dataStat(path , '小类.xlsx')
     colNames = ['年度','月份','店仓区域名称']
     dataNames = ['零售数量','零售金额', '零售吊牌金额']
     #ds.dsSum(colNames , dataNames)
     ds.dsSum(colNames , dataNames)
     print(ds.dsCal('平均数',['零售金额','零售数量',],['/']))
-    print(ds.dsDel(dataNames))
     #a = pStat.statSum(bd.data , colNames , dataNames)
-    #print(pStat.statSearch(a,[2015,1.0,'上海']))
+    print(ds.dsSearch([2015,1,'上海']))
