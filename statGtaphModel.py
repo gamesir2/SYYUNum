@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import loadDataModel as ldm
 import pStat
+import pyecharts
 
 '''
 sdataType类属性解析（用于计算获取数据）:
@@ -10,7 +11,7 @@ sdataType类属性解析（用于计算获取数据）:
             当basedatas属性为list，该属性需填写
 '''
 class sDataType(object):
-    def __init__(self , baseDataNames , newDataName , dataType = '' ):
+    def __init__(self , baseDataNames , newDataName , dataType = None ):
         self._baseDataNames = pStat.statChangeListType(baseDataNames)
         self._newDataName = newDataName
         self._dataType = pStat.statChangeListType(dataType)
@@ -28,21 +29,21 @@ class sDataType(object):
         return self._dataType
 
 '''
-dataStatGraphProperty类属性解析（）:
+dataStatGraph类属性解析（）:
     datadir：数据地址(str)
     stype：视图类型(str) (Bar:柱状图 Line:折线图 Pie:饼状图 Rank:排行榜)
     series：视图系列(str)
     category：视图类别(str)
-    sdatatype：视图数据类型(sdataType or list（sdataType）)
+    sdatatype：视图数据类型(sdataType)
 '''
-class dataStatGraphProperty(object):
+class dataStatGraph(object):
     def __init__(self , dataDir, sType , series , category , sDataType:sDataType):
         self._dataDir = dataDir
         self._sType = sType
         self._series = series
         self._category = category
         self._sDataType = sDataType
-        self._statData = None
+        self._statData:ldm.dataStat = None
 
     @property
     def dataDir( self ):
@@ -68,9 +69,17 @@ class dataStatGraphProperty(object):
     def statData(self):
         return self._statData
 
-    @statData.setter
-    def statData(self,value):
-        self._statData = value
+    @property
+    def optionSelects(self):
+        return self._optionSelects
+
+    @property
+    def serieList(self):
+        return self._serieList
+
+    @property
+    def categoryList(self):
+        return self._categoryList
 
     def dataGet(self,path,options):
         sdt = self.sDataType
@@ -84,29 +93,55 @@ class dataStatGraphProperty(object):
             self._statData.dsReName(sdt.newDataName, sdt.baseDataNames)
         self._statData.dsLoc(colNames, sdt.newDataName)
 
+        self._optionSelects = []
+        for option in options:
+            self._optionSelects.append(self._statData.dsGetLevelIndex(option))
+
+        self._serieList = self._statData.dsGetLevelIndex(self.series)
+        self._categoryList = self._statData.dsGetLevelIndex(self.category)
+
+
+    def getOptionData(self,optionSelect):
+        gvd =[]
+        for serie in self.serieList:
+            l=[]
+            for category in self._categoryList:
+                colname = optionSelect + [serie , category]
+                l.append(self._statData.dsSearch(colname))
+            gvd.append({serie:l})
+        return gvd
+
+    def graphViewRenderEmbed(self):
+        pass
+
+    def setViewData(self,optionData):
+        pass
 
 
 
-class dsgpGroup(object):
-    def __init__(self , *dsgps:dataStatGraphProperty , options = [] ):
-        self._dsgps = list(dsgps)
+class dsgGroup(object):
+    def __init__(self , *dsgs:dataStatGraph , options = [] ):
+        self._dsgs = list(dsgs)
         self._options = pStat.statChangeListType(options)
+        self._optionSelects = []
 
     @property
-    def dsgps( self ):
-        return self._dsgps
+    def dsgs( self ):
+        return self._dsgs
 
     @property
     def options( self ):
         return self._options
 
-    def append(self , dsgp):
-        self._dsgps.append(dsgp)
+    @property
+    def optionSelects(self):
+
+        return self._optionSelects
 
     def groupViewRenderEmbed(self, path):
 
         pass
 
     def groupDataGet(self, path):
-        for dsgp in self.dsgps:
-            dsgp.dataGet(path,self.options)
+        for dsp in self.dsgs:
+            dsp.dataGet(path,self.options)
