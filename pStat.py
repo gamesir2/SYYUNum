@@ -6,22 +6,22 @@ Created on Thu Oct 12 14:00:11 2017
 """
 import pandas as pd
 #data是pd.DataFrame类型
-def statSearch( data , colNames):
-    cns = statChangeListType(colNames) 
+def statSearch( data:pd.DataFrame , colNames):
+    cns = statChangeListType(colNames)
     return data.xs( tuple(cns) )
 
-def statSum( data , colNames , dataNames ):
+def statSum( data:pd.DataFrame , colNames , dataNames ):
     cns = statChangeListType(colNames)
     dns = statChangeListType(dataNames)
     return data.loc[ : , cns + dns ].groupby(cns).sum()
 
-def statCount( data ,  colNames , dataNames ):
+def statCount( data:pd.DataFrame , colNames , dataNames ):
     cns = statChangeListType(colNames)
     dns = statChangeListType(dataNames)
     return data.loc[ : , cns + dns ].groupby(cns).count()
 
-def statSort( data , colNames , ascendType):
-    return data.sort_index( by = colNames , ascending = ascendType)
+def statSort( data:pd.DataFrame , dataNames , ascendType):
+    return data.sort_values( by = dataNames , ascending = ascendType)
 
 #str转list
 def statChangeListType( s ):

@@ -53,8 +53,7 @@ class viewNavProperty(object):
 
     def statViewsRenderEmbed(self, channel, brand , stat):
         views_render_embed = ''
-        path = r'C:\Users\xbproj02\Desktop'
-        tPath = path +'\\'+ channel + '\\' + brand
+        tPath = cd.path +'\\'+ channel + '\\' + brand
         for dg in self._cndict[channel]['stat'][stat]:
             views_render_embed += dg.groupViewRenderEmbed(tPath) + '\n'
         return views_render_embed

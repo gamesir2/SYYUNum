@@ -120,9 +120,9 @@ class dataStatGraph(object):
 
 
 class dsgGroup(object):
-    def __init__(self , *dsgs:dataStatGraph , options = [] ):
+    def __init__(self , *dsgs:dataStatGraph , options = None ):
         self._dsgs = list(dsgs)
-        self._options = pStat.statChangeListType(options)
+        self._options = options
         self._optionSelects = []
 
     @property
@@ -131,7 +131,7 @@ class dsgGroup(object):
 
     @property
     def options( self ):
-        return self._options
+        return pStat.statChangeListType(self._options)
 
     @property
     def optionSelects(self):
@@ -139,9 +139,6 @@ class dsgGroup(object):
         return self._optionSelects
 
     def groupViewRenderEmbed(self, path):
-
-        pass
-
-    def groupDataGet(self, path):
         for dsp in self.dsgs:
             dsp.dataGet(path,self.options)
+        pass

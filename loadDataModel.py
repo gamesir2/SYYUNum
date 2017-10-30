@@ -13,7 +13,6 @@ class baseData(object):
         self._cList = {'年度':'int64','月份':'int64','零售吊牌金额':'float64'}
         self._path = path
         self.data = self.bdOutPutResult ( self._path )
-        
     @property
     def cList( self ):
         return self._cList
@@ -66,8 +65,14 @@ class dataStat(object):
     def sData( self ):
         return self._sData
     
-    def dsSearch( self , colNames ):
-        return pStat.statSearch( self._sData , colNames )
+    def dsSearch( self ,colNames):
+        try:
+            return float(pStat.statSearch(self.sData,colNames))
+        except:
+            return 0
+
+    def dsGetLevelIndex(self , level):
+        return sorted(list(set(self.sData.index.get_level_values(level))))
     
     def dsSum( self , colNames , dataNames ):
         self._sData = pStat.statSum(self._bData.data , colNames , dataNames)
@@ -97,8 +102,8 @@ class dataStat(object):
         self._sData = pStat.statCount(self._bData.data , colNames , dataNames)
         return self.sData
 
-    def dsRank( self , colNames , rankCount = 0 ) :
-        self._sData = pStat.statSort(self._sData , colNames , False)
+    def dsRank( self , dataNames , rankCount = 0 ) :
+        self._sData = pStat.statSort(self._sData , dataNames , False)
         if rankCount == 0:
             return self.sData
         else:
@@ -109,9 +114,9 @@ if __name__=='__main__':
     path = r'C:\Users\xbproj02\Desktop\ZYXS\SM'
     ds = dataStat(path , '小类.xlsx')
     colNames = ['年度','月份','店仓区域名称']
-    dataNames = ['零售数量','零售金额', '零售吊牌金额']
-    #ds.dsSum(colNames , dataNames)
+    dataNames = ['零售数量']
     ds.dsSum(colNames , dataNames)
-    print(ds.dsCal('平均数',['零售金额','零售数量',],['/']))
-    #a = pStat.statSum(bd.data , colNames , dataNames)
-    print(ds.dsSearch([2015,1,'上海']))
+    # print(ds.dsCal('平均数',['零售金额','零售数量',],['/']))
+    # a = pStat.statSum(bd.data , colNames , dataNames)
+    # print(ds.dsSearch([2015,1,'广州']))
+    print(ds.sData.to_json())
