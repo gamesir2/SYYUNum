@@ -1,0 +1,32 @@
+<div class="row" id = "{{ dg_id }}">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="dataTables_length">
+                    {% for selectid,optionSelect in optionSelects.items()%}
+                    <label>
+                        <select class="form-control" id="s_{{ selectid }}">
+                            {% for key,value in optionSelect.items() %}
+                                <option value={{ key }} >{{ key }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    {% endfor %}
+                    <script>
+                        $('#{{ dg_id }} select').change(function(){
+                            var options = [];
+                            {% for selectid,optionSelect in optionSelects.items()%}
+                            options.push($('#s_{{ selectid }}').val());
+                            {% endfor %}
+                            data = selectChange({{ dg_id }},options);
+
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    <div class="row">
+        {% for chart in allcharts %}
+{{ chart.render_embed() }}
+        {% endfor %}
+    </div>
+</div>

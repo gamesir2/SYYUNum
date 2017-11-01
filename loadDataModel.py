@@ -10,7 +10,7 @@ import pStat
 class baseData(object):
     def __init__(self, path, dataSource):
         self._dataSource = dataSource
-        self._cList = {'年度':'int64','月份':'int64','零售吊牌金额':'float64'}
+        self._cList = {'年度':int,'月份':int,'零售吊牌金额':'float64'}
         self._path = path
         self.data = self.bdOutPutResult ( self._path )
     @property
@@ -67,9 +67,9 @@ class dataStat(object):
     
     def dsSearch( self ,colNames):
         try:
-            return float(pStat.statSearch(self.sData,colNames))
+            return int(pStat.statSearch(self.sData,colNames))
         except:
-            return 0
+            return None
 
     def dsGetLevelIndex(self , level):
         return sorted(list(set(self.sData.index.get_level_values(level))))
@@ -89,13 +89,13 @@ class dataStat(object):
         exec(evalstr)
         return self.sData
 
-    def dsLoc(self,colNames,newDataNames):
-        self._sData = self.sData.loc[ : , colNames + newDataNames ]
+    def dsLoc(self,newDataNames):
+        self._sData = self.sData.loc[ : , newDataNames ]
         return self.sData
 
-    def dsReName(self, newDataName, baseDataName):
-        if newDataName != baseDataName:
-            self._sData[newDataName] = self.sData[baseDataName]
+    def dsReName(self, newDataName, baseDataNames):
+        if newDataName != baseDataNames:
+            self._sData[newDataName] = self.sData[baseDataNames]
         return self.sData
     
     def dsCount( self , colNames ):
@@ -119,4 +119,6 @@ if __name__=='__main__':
     # print(ds.dsCal('平均数',['零售金额','零售数量',],['/']))
     # a = pStat.statSum(bd.data , colNames , dataNames)
     # print(ds.dsSearch([2015,1,'广州']))
-    print(ds.sData.to_json())
+    print(ds.dsRank('零售数量'))
+    # print(ds.dsGetLevelIndex('月份'))
+    # print(ds.dsLoc(['零售数量']))

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import statGtaphModel as sgm
 
+
 sdt = sgm.sDataType
 dsg = sgm.dataStatGraph
 dg = sgm.dsgGroup
@@ -16,53 +17,54 @@ cndict = {
         'stat':{
             '销售分析':[
                 dg(
-                    dsg('小类.xlsx', 'Line', '年', '月', sdt('零售金额', '销售额') ),
-                    dsg('小类.xlsx', 'Line', '年', '月', sdt(['零售金额', '零售数量'],'零售单价',dataType='/')),
+                    dsg('小类.xlsx', 'Line', '年度', '月份', sdt('零售金额', '销售额') ),
+                    dsg('小类.xlsx', 'Line', '年度', '月份', sdt(['零售金额', '零售数量'],'零售单价',dataType='/')),
                     options='店仓区域名称'
                 ),
                 dg(
-                    dsg('小类.xlsx', 'Rank', '年', '店仓区域名称', sdt('零售金额', '销售额'))
+                    dsg('小类.xlsx', 'Rank', '', '店仓区域名称', sdt('零售金额', '销售额')),
+                    options='年度'
                 )
             ],
             '客户分析':[
                 dg(
-                    dsg('客户.xlsx', 'Line', '年', '月', sdt('零售单数', '客流量')),
-                    dsg('客户.xlsx', 'Line', '年', '月', sdt(['零售金额', '零售单数'], '客单价', dataType='/')),
+                    dsg('客户.xlsx', 'Line', '年度', '月份', sdt('零售单数', '客流量')),
+                    dsg('客户.xlsx', 'Line', '年度', '月份', sdt(['零售金额', '零售单数'], '客单价', dataType='/')),
                     options='店仓区域名称'
                 ),
                 dg(
-                    dsg('客户.xlsx', 'Bar', '年', '店仓区域名称', sdt('零售单数', '客流量')),
-                    dsg('客户.xlsx', 'Bar', '年', '店仓区域名称', sdt(['零售金额', '零售单数'], '客单价', dataType='/')),
-                    options='月'
+                    dsg('客户.xlsx', 'Bar', '年度', '店仓区域名称', sdt('零售单数', '客流量')),
+                    dsg('客户.xlsx', 'Bar', '年度', '店仓区域名称', sdt(['零售金额', '零售单数'], '客单价', dataType='/')),
+                    options='月份'
                 ),
             ],
             '类别分析':[
                 dg(
                     dsg('小类.xlsx', 'Pie', '店仓区域名称', '大分类名称', sdt('零售金额', '销售额')),
                     dsg('小类.xlsx', 'Pie', '店仓区域名称', '大分类名称', sdt('零售数量', '销售量')),
-                    options='年'
+                    options='年度'
                 ),
                 dg(
-                    dsg('小类.xlsx', 'Bar', '年', '店仓区域名称', sdt(['零售金额', '零售数量'],'零售单价', dataType='/')),
+                    dsg('小类.xlsx', 'Bar', '年度', '店仓区域名称', sdt(['零售金额', '零售数量'],'零售单价', dataType='/')),
                     options='大分类名称'
                 ),
                 dg(
-                    dsg('小类.xlsx', 'Rank', '大分类名称', '小分类名称', sdt('零售金额', '销售额', dataType='%')) ,
-                    options=['年', '店仓区域名称']
+                    dsg('小类.xlsx', 'Rank', '', '小分类名称', sdt('零售金额', '销售额', dataType='%')) ,
+                    options=['年度', '店仓区域名称','大分类名称']
                 )
             ],
             '季节分析':[
                 dg(
-                    dsg('波段.xlsx', 'Bar' ,'季节名称', '月', sdt('销售数量','销售量')),
-                    dsg('波段.xlsx', '%Bar','季节名称', '月', sdt('销售数量','销售量')),
-                    options=['年', '店仓区域名称', '大分类名称']
+                    dsg('波段.xlsx', 'Bar' ,'季节名称', '月份', sdt('销售数量','销售量')),
+                    dsg('波段.xlsx', '%Bar','季节名称', '月份', sdt('销售数量','销售量')),
+                    options=['年度', '店仓区域名称', '大分类名称']
                 )
             ],
             '尺码&颜色分析':[
                 dg(
                     dsg('尺寸.xlsx', 'Pie', '大分类名称', '尺码名称', sdt('销售数量','销售量')),
                     dsg('颜色.xlsx', 'Pie', '大分类名称', '颜色名称', sdt('销售数量','销售量')),
-                    options=['年', '店仓区域名称']
+                    options=['年度', '店仓区域名称']
                 )
             ]
         }

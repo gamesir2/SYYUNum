@@ -61,6 +61,4 @@ class viewNavProperty(object):
 
 if __name__ == '__main__':
     vmp = viewNavProperty()
-    print([[i.name,i.hdir] for i in vmp.stats('ZYXS','SM')])
-    print([[i.name,i.hdir] for i in vmp.brands('ZYXS')])
-    print([[i.name,i.hdir] for i in vmp.channels()])
+    print(vmp.statViewsRenderEmbed('ZYXS','SM','销售分析'))

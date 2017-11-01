@@ -71,17 +71,6 @@
         <!-- /. NAV SIDE  -->
       
 		<div id="page-wrapper">
-		  <div class="header"> 
-                        <h1 class="page-header">
-                            Dashboard
-                        </h1>
-						<ol class="breadcrumb">
-					  <li><a href="#">Home</a></li>
-					  <li><a href="#">Dashboard</a></li>
-					  <li class="active">Data</li>
-					</ol> 
-									
-		</div>
             <div id="page-inner">
 
 				<!-- /. ROW  -->
@@ -238,6 +227,7 @@
     <script src="/static/js/bootstrap.min.js"></script>
 	
 	<script src="/static/materialize/js/materialize.min.js"></script>
+    <script src="/static/js/echarts.js"></script>
 	
     <!-- Metis Menu Js -->
     <script src="/static/js/jquery.metisMenu.js"></script>
@@ -253,7 +243,25 @@
 	
     <!-- Custom Js -->
     <script src="/static/js/custom-scripts.js"></script>
- 
+    <script>
+    function selectChange(dg_id,options){
+    $.ajax( {
+        type : "POST",
+        url : "{{url_for('statweb',channel=achannel, brand=acbrand, stat = acstat)}}",
+        dataType : "json",
+        data : {
+            "dg_id" : dg_id,
+            "options" : options
+        },
+        error: function( XMLResponse ) {
+            alert( XMLResponse.responseText )
+        },
+        success : function ( data ) {
+            return data
+        }
+    } );
+    }
+    </script>
 
 </body>
 
