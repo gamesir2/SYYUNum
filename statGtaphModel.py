@@ -45,6 +45,7 @@ class dataStatGraph(object):
         self._category = category
         self._sDataType = sDataType
         self._statData:ldm.dataStat = None
+        self._options = []
 
     @property
     def dataDir( self ):
@@ -86,13 +87,21 @@ class dataStatGraph(object):
     def chart(self):
         return self._chart
 
-    def dataGet(self,path,options):
+    @property
+    def options(self):
+        return self._options
+
+    @options.setter
+    def options(self,value):
+        self._options = value
+
+    def dataGet(self,path):
         sdt = self.sDataType
         self._statData = ldm.dataStat(path, self.dataDir)
         if self.sType == 'Rank' or bool(self.series) == False :
             self._series = 'All'
             self._statData.bData.data[self.series] = self.sDataType.newDataName
-        colNames = options + [self.series, self.category]
+        colNames = self.options + [self.series, self.category]
         dataNames = sdt.baseDataNames
         self._statData.dsSum(colNames, dataNames)
         if sdt.dataType:
@@ -102,7 +111,7 @@ class dataStatGraph(object):
         self._statData.dsLoc(sdt.newDataName)
 
         self._optionSelects = []
-        for option in options:
+        for option in self.options:
             self._optionSelects.append({str(i): i for i in self._statData.dsGetLevelIndex(option)})
 
         self._serieDict = {str(i): i for i in self._statData.dsGetLevelIndex(self.series)}
@@ -115,6 +124,7 @@ class dataStatGraph(object):
     def _chartBuild(self):
         isRank = False
         xaxis_name = self.category
+        Axis = 'xAxis'
         if self.sType == 'Bar':
             self._chart = chartView.myBar(self.sDataType.newDataName)
         elif self.sType == 'Line':
@@ -123,29 +133,35 @@ class dataStatGraph(object):
             self._chart = chartView.myBar(self.sDataType.newDataName)
             isRank = True
             xaxis_name = None
+            Axis='yAxis'
         gvd = self.getFirstOptionData()
         i=0
         for key, value in self.serieDict.items():
-            self._chart.add(key, gvd['xAxis']['data'],gvd['series'][i]['data'],xaxis_name=xaxis_name,is_convert=isRank)
+            self._chart.add(key, gvd[Axis]['data'],gvd['series'][i]['data'],xaxis_name=xaxis_name,is_convert=isRank)
             i+=1
 
     def getFirstOptionData(self):
         firstOptionSelect = []
         for optionSelect in self.optionSelects:
-            firstOptionSelect.append(pStat.dictValueList(optionSelect)[0])
+            firstOptionSelect.append(pStat.dictKeysList(optionSelect)[0])
         return self.getOptionData(firstOptionSelect)
 
-    def getOptionData(self,optionSelect):
-        gvd ={'xAxis':{},'series':[]}
+    def getOptionData(self,optionKeys):
+        optionSelect=[]
+        for i in range(len(optionKeys)):
+            optionSelect.append(self.optionSelects[i][optionKeys[i]])
+
         if self.sType == 'Rank':
+            gvd = {'yAxis': {}, 'series': []}
             l={}
             for ckey, cvalue in self.categoryDict.items():
                 colname = optionSelect + [pStat.dictValueList(self.serieDict)[0], cvalue]
                 l.update({ckey:self._statData.dsSearch(colname)})
             l = pStat.dictSorted(l)
-            gvd['xAxis'].update({'data':pStat.dictKeysList(l)})
+            gvd['yAxis'].update({'data':pStat.dictKeysList(l)})
             gvd['series'].append({'name':pStat.dictKeysList(self.serieDict)[0],'data':pStat.dictValueList(l)})
         else:
+            gvd = {'xAxis': {}, 'series': []}
             gvd['xAxis']={'data':list(self.categoryDict.keys())}
             for skey, svalue in self.serieDict.items():
                 dic={'name':skey}
@@ -175,9 +191,11 @@ class dsgGroup(object):
     def __init__(self , *dsgs:dataStatGraph , options = None ):
         self._dg_id = uuid.uuid4().hex
         self._dsgs = list(dsgs)
-        self._options = pStat.statChangeListType(options)
+        self._options = options
         self._optionSelects ={}
         self._allCharts = []
+        for dsg in self._dsgs:
+            dsg.options = self.options
 
     @property
     def dg_id(self):
@@ -189,7 +207,7 @@ class dsgGroup(object):
 
     @property
     def options(self):
-        return self._options
+        return pStat.statChangeListType(self._options)
 
     @property
     def optionSelects(self):
@@ -199,47 +217,51 @@ class dsgGroup(object):
     def allCharts(self):
         return self._allCharts
 
-
     def startUp(self,path):
+        self._allCharts = []
         for dsp in self._dsgs:
-            dsp.dataGet(path, self.options)
+            dsp.dataGet(path)
             self._allCharts.append(dsp.chart)
 
+        self._optionSelects = {}
         for optionSelect in self._dsgs[0].optionSelects:
             self._optionSelects.update({uuid.uuid4().hex:optionSelect})
 
-
-
-
-
-    def groupViewRenderEmbed(self,path):
-        self.startUp(path)
+    def groupViewRenderEmbed(self):
         embed = 'groupviews.html'
         tmp = pStat.JINJA2_ENV.get_template(embed)
         html = tmp.render(dg_id=self.dg_id,
                           optionSelects=self.optionSelects,
                           allcharts=self.allCharts
+
                           )
         return html
 
+    def getSelectDatas(self,optionSelect):
+        datadic = {}
+        for dsp in self._dsgs:
+            datadic.update({dsp.chart_id():dsp.getOptionData(optionSelect)})
+        return datadic
+
 
 if __name__=='__main__':
-    tPath = cd.path + '\\' + 'ZYXS' + '\\' + 'SM'
+    path = r'C:\Users\xbproj02\Desktop'
+    tPath = path + '\\' + 'ZYXS' + '\\' + 'SM'
     dg = dsgGroup
     dsg = dataStatGraph
     sdt = sDataType
-    ds = dsgGroup(
-                    dataStatGraph('小类.xlsx', 'Line', '年度', '月份', sDataType('零售金额', '销售额') ),
-                    dataStatGraph('小类.xlsx', 'Line', '年度', '月份', sDataType(['零售金额', '零售数量'],'零售单价',dataType='/')),
-                    options='店仓区域名称'
-                )
-    # ds = dg(
-    #             dsg('小类.xlsx', 'Rank', '', '店仓区域名称', sdt('零售金额', '销售额')),
-    #             options='年度'
-    #         )
-    # ds.startUp(tPath)
+    # ds = dsgGroup(
+    #                 dataStatGraph('小类.xlsx', 'Line', '年度', '月份', sDataType('零售金额', '销售额') ),
+    #                 dataStatGraph('小类.xlsx', 'Line', '年度', '月份', sDataType(['零售金额', '零售数量'],'零售单价',dataType='/')),
+    #                 options='店仓区域名称'
+    #             )
+    ds = dg(
+                dsg('小类.xlsx', 'Rank', '', '店仓区域名称', sdt('零售金额', '销售额')),
+                options='年度'
+            )
+    ds.startUp(tPath)
     # ds.dsgs[0].chart.render()
     # print(ds.dsgs[0].chartRenderEmbed())
     # print(ds.optionSelects)
-    # print(ds.dsgs[0].getOptionData(['广州']))
-    print(ds.groupViewRenderEmbed(tPath))
+    # print(ds.getSelectDatas(['2015']))
+    print(ds.groupViewRenderEmbed())

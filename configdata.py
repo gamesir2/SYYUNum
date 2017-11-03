@@ -15,58 +15,203 @@ cndict = {
             'SB':'圣宝'
         },
         'stat':{
-            '销售分析':[
-                dg(
-                    dsg('小类.xlsx', 'Line', '年度', '月份', sdt('零售金额', '销售额') ),
-                    dsg('小类.xlsx', 'Line', '年度', '月份', sdt(['零售金额', '零售数量'],'零售单价',dataType='/')),
-                    options='店仓区域名称'
-                ),
-                dg(
-                    dsg('小类.xlsx', 'Rank', '', '店仓区域名称', sdt('零售金额', '销售额')),
-                    options='年度'
-                )
-            ],
-            '客户分析':[
-                dg(
-                    dsg('客户.xlsx', 'Line', '年度', '月份', sdt('零售单数', '客流量')),
-                    dsg('客户.xlsx', 'Line', '年度', '月份', sdt(['零售金额', '零售单数'], '客单价', dataType='/')),
-                    options='店仓区域名称'
-                ),
-                dg(
-                    dsg('客户.xlsx', 'Bar', '年度', '店仓区域名称', sdt('零售单数', '客流量')),
-                    dsg('客户.xlsx', 'Bar', '年度', '店仓区域名称', sdt(['零售金额', '零售单数'], '客单价', dataType='/')),
-                    options='月份'
-                ),
-            ],
-            '类别分析':[
-                dg(
-                    dsg('小类.xlsx', 'Pie', '店仓区域名称', '大分类名称', sdt('零售金额', '销售额')),
-                    dsg('小类.xlsx', 'Pie', '店仓区域名称', '大分类名称', sdt('零售数量', '销售量')),
-                    options='年度'
-                ),
-                dg(
-                    dsg('小类.xlsx', 'Bar', '年度', '店仓区域名称', sdt(['零售金额', '零售数量'],'零售单价', dataType='/')),
-                    options='大分类名称'
-                ),
-                dg(
-                    dsg('小类.xlsx', 'Rank', '', '小分类名称', sdt('零售金额', '销售额', dataType='%')) ,
-                    options=['年度', '店仓区域名称','大分类名称']
-                )
-            ],
-            '季节分析':[
-                dg(
-                    dsg('波段.xlsx', 'Bar' ,'季节名称', '月份', sdt('销售数量','销售量')),
-                    dsg('波段.xlsx', '%Bar','季节名称', '月份', sdt('销售数量','销售量')),
-                    options=['年度', '店仓区域名称', '大分类名称']
-                )
-            ],
-            '尺码&颜色分析':[
-                dg(
-                    dsg('尺寸.xlsx', 'Pie', '大分类名称', '尺码名称', sdt('销售数量','销售量')),
-                    dsg('颜色.xlsx', 'Pie', '大分类名称', '颜色名称', sdt('销售数量','销售量')),
-                    options=['年度', '店仓区域名称']
-                )
-            ]
+            'XSFX':{
+                'name':'销售分析',
+                'view':[{
+                    'dsg':[{
+                        'datadir':'小类.xlsx',
+                        'stype':'Line',
+                        'serise':'年度',
+                        'category':'月份',
+                        'sdt':{
+                            'baseDataName':['零售金额'],
+                            'newDataName':'销售额',
+                            'dataType':None
+                            }},
+                        {
+                        'datadir': '小类.xlsx',
+                        'stype': 'Line',
+                        'serise': '年度',
+                        'category': '月份',
+                        'sdt': {
+                            'baseDataName': ['零售金额', '零售数量'],
+                            'newDataName': '零售单价',
+                            'dataType': '/'
+                        }}],
+                    'options':'店仓区域名称'
+                    },
+                    {
+                    'dsg':[{
+                        'datadir': '小类.xlsx',
+                        'stype': 'Rank',
+                        'serise': None,
+                        'category': '店仓区域名称',
+                        'sdt': {
+                            'baseDataName': '零售金额',
+                            'newDataName': '销售额',
+                            'dataType': None
+                        }}],
+                    'options':'年度'
+                    }
+                ]
+            },
+            'KHFX':{
+                'name':'客户分析',
+                'view':[{
+                    'dsg':[{
+                        'datadir':'客户.xlsx',
+                        'stype':'Line',
+                        'serise':'年度',
+                        'category':'月份',
+                        'sdt':{
+                            'baseDataName':['零售单数'],
+                            'newDataName':'客流量',
+                            'dataType':None
+                            }},
+                        {
+                        'datadir': '客户.xlsx',
+                        'stype': 'Line',
+                        'serise': '年度',
+                        'category': '月份',
+                        'sdt': {
+                            'baseDataName':['零售金额', '零售单数'],
+                            'newDataName': '客单价',
+                            'dataType': '/'
+                        }}],
+                    'options':'店仓区域名称'
+                    },
+                    {
+                    'dsg': [{
+                        'datadir': '客户.xlsx',
+                        'stype': 'Bar',
+                        'serise': '年度',
+                        'category': '店仓区域名称',
+                        'sdt': {
+                            'baseDataName': ['零售单数'],
+                            'newDataName': '客流量',
+                            'dataType': None
+                        }},
+                        {
+                            'datadir': '客户.xlsx',
+                            'stype': 'Bar',
+                            'serise': '年度',
+                            'category': '店仓区域名称',
+                            'sdt': {
+                                'baseDataName':['零售金额', '零售单数'],
+                                'newDataName': '客单价',
+                                'dataType': '/'
+                            }}],
+                    'options': '月份'
+                    }
+                ]
+            },
+            'LBFX':{
+                'name':'类别分析',
+                'view':[{
+                    'dsg':[{
+                        'datadir':'小类.xlsx',
+                        'stype':'Pie',
+                        'serise':'店仓区域名称',
+                        'category':'大分类名称',
+                        'sdt':{
+                            'baseDataName':['零售金额'],
+                            'newDataName':'销售额',
+                            'dataType':None
+                            }},
+                        {
+                        'datadir': '小类.xlsx',
+                        'stype': 'Pie',
+                        'serise': '店仓区域名称',
+                        'category': '大分类名称',
+                        'sdt': {
+                            'baseDataName':['零售数量'],
+                            'newDataName': '销售量',
+                            'dataType': None
+                        }}],
+                    'options':'年度'
+                    },
+                    {
+                    'dsg': [{
+                            'datadir': '小类.xlsx',
+                            'stype': 'Bar',
+                            'serise': '年度',
+                            'category': '店仓区域名称',
+                            'sdt': {
+                                'baseDataName':['零售金额', '零售数量'],
+                                'newDataName': '零售单价',
+                                'dataType': '/'
+                            }}],
+                    'options': '大分类名称'
+                    },
+                    {
+                    'dsg': [{
+                            'datadir': '小类.xlsx',
+                            'stype': 'Rank',
+                            'serise': None,
+                            'category': '店仓区域名称',
+                            'sdt': {
+                                'baseDataName':['零售金额', '零售数量'],
+                                'newDataName': '零售单价',
+                                'dataType': '/'
+                            }}],
+                    'options': ['年度', '店仓区域名称','大分类名称']
+                    },
+                ]
+            },
+            'JJFX':{
+                'name':'季节分析',
+                'view':[{
+                    'dsg':[{
+                        'datadir':'波段.xlsx',
+                        'stype':'Bar',
+                        'serise':'季节名称',
+                        'category':'月份',
+                        'sdt':{
+                            'baseDataName':['零售数量'],
+                            'newDataName':'销售量',
+                            'dataType':None
+                            }},
+                        {
+                        'datadir': '波段.xlsx',
+                        'stype': '%Bar',
+                        'serise': '季节名称',
+                        'category': '月份',
+                        'sdt': {
+                            'baseDataName':['零售数量'],
+                            'newDataName': '销售量',
+                            'dataType': None
+                        }}],
+                    'options':['年度', '店仓区域名称', '大分类名称']
+                    }
+                ]
+            },
+            'CMYS': {
+                'name': '尺码&颜色分析',
+                'view': [{
+                    'dsg': [{
+                        'datadir': '尺码.xlsx',
+                        'stype': 'Pie',
+                        'serise': '大分类名称',
+                        'category': '尺码名称',
+                        'sdt': {
+                            'baseDataName': ['零售数量'],
+                            'newDataName': '销售量',
+                            'dataType': None
+                        }},
+                        {
+                            'datadir': '颜色.xlsx',
+                            'stype': 'Pie',
+                            'serise': '大分类名称',
+                            'category': '颜色名称',
+                            'sdt': {
+                                'baseDataName': ['零售数量'],
+                                'newDataName': '销售量',
+                                'dataType': None
+                            }}],
+                    'options': ['年度', '店仓区域名称']
+                    }
+                ]
+            }
         }
    },
     'DH':{

@@ -16,7 +16,10 @@
     <!-- Custom Styles-->
     <link href="/static/css/custom-styles.css" rel="stylesheet" />
     <!-- Google Fonts-->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="/static/js/Lightweight-Chart/cssCharts.css">
+    <script src="/static/js/echarts.min.js"></script>
+    <script src="/static/js/jquery-1.10.2.js"></script>
 </head>
 
 <body>
@@ -29,7 +32,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand waves-effect waves-dark" href="index.html"><i class="large material-icons">track_changes</i> <strong>数据分析</strong></a>
+                <a class="navbar-brand waves-effect waves-dark" href="#"><i class="large material-icons">track_changes</i> <strong>数据分析</strong></a>
 				
 		<div id="sideNav" href=""><i class="material-icons dp48">toc</i></div>
             </div>
@@ -37,6 +40,7 @@
             <ul class="nav navbar-top-links navbar-right">
                 <li><a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown1"><i class="fa fa-tasks fa-fw"></i> <b>分析</b> <i class="material-icons right">arrow_drop_down</i></a></li>
                 <li><a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown2"><i class="fa fa-suitcase fa-fw"></i> <b>品牌</b> <i class="material-icons right">arrow_drop_down</i></a></li>
+                <li></li>
             </ul>
         </nav>
 		<!-- Dropdown Structure -->
@@ -71,197 +75,34 @@
         <!-- /. NAV SIDE  -->
       
 		<div id="page-wrapper">
+            <div class="header">
+		    </div>
+                        <h1 class="page-header">
+                            {{ acstat }}
+                        </h1>
             <div id="page-inner">
-
-				<!-- /. ROW  -->
-					
-		 
-				<div class="row">
-				<div class="col-md-5"> 
-						<div class="card">
-						<div class="card-image">
-						 <div id="morris-line-chart"></div>
-						</div> 
-						<div class="card-action">
-						  <b>Line Chart</b>
-						</div>
-						</div>
-		  
-					</div>		
-					
-						<div class="col-md-7"> 
-					<div class="card">
-					<div class="card-image">
-					  <div id="morris-bar-chart"></div>
-					</div> 
-					<div class="card-action">
-					  <b> Bar Chart Example</b>
-					</div>
-					</div>					
-					</div>
-					
-				</div> 
-			 
-				
-				
-                <div class="row">
-                    <div class="col-xs-12">
-						<div class="card">
-					<div class="card-image">
-					  <div id="morris-area-chart"></div>
-					</div> 
-					<div class="card-action">
-					  <b>Area Chart</b>
-					</div>
-					</div>	 
-                    </div> 
-
-                </div>
-				<div class="row">
-				<div class="col-md-12">
-				
-					</div>		
-				</div> 	
-                <!-- /. ROW  -->
-
-	   
-				
-				
-				
-                <div class="row">
-                    <div class="col-md-4 col-sm-12 col-xs-12">
-						<div class="card"><div class="card-action">
-					  <b>Tasks Panel</b>
-					</div>
-					<div class="card-image">
-					  <div class="collection">
-						  <a href="#!" class="collection-item">Red<span class="new badge red" data-badge-caption="red">4</span></a>
-						  <a href="#!" class="collection-item">Blue<span class="new badge blue" data-badge-caption="blue">4</span></a>
-						  <a href="#!" class="collection-item"><span class="badge">1</span>Alan</a>
-							<a href="#!" class="collection-item"><span class="new badge">4</span>Alan</a>
-							<a href="#!" class="collection-item">Alan<span class="new badge blue" data-badge-caption="blue">4</span></a>
-							<a href="#!" class="collection-item"><span class="badge">14</span>Alan</a>
-							   <a href="#!" class="collection-item">Custom Badge Captions<span class="new badge" data-badge-caption="custom caption">4</span></a>
-							<a href="#!" class="collection-item">Custom Badge Captions<span class="badge" data-badge-caption="custom caption">4</span></a>
-						</div>
-					</div> 
-					
-					</div>	  
-
-                    </div>
-                    <div class="col-md-8 col-sm-12 col-xs-12">
-	<div class="card">
-	<div class="card-action">
-					  <b>User List</b>
-					</div>
-					<div class="card-image">
-					  <ul class="collection">
-    <li class="collection-item avatar">
-      <i class="material-icons circle green">track_changes</i>
-      <span class="title">Title</span>
-      <p>First Line <br>
-         Second Line
-      </p>
-      <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-    </li>
-    <li class="collection-item avatar">
-      <i class="material-icons circle">folder</i>
-      <span class="title">Title</span>
-      <p>First Line <br>
-         Second Line
-      </p>
-      <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-    </li>
-    <li class="collection-item avatar">
-      <i class="material-icons circle green">track_changes</i>
-      <span class="title">Title</span>
-      <p>First Line <br>
-         Second Line
-      </p>
-      <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-    </li>
-    <li class="collection-item avatar">
-      <i class="material-icons circle red">play_arrow</i>
-      <span class="title">Title</span>
-      <p>First Line <br>
-         Second Line
-      </p>
-      <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-    </li>
-  </ul>
-					 </div>  
-					</div>	 
-					
-                       
-
-                    </div>
-                </div>
-                <!-- /. ROW  -->
-			   <div class="fixed-action-btn horizontal click-to-toggle">
-    <a class="btn-floating btn-large red">
-      <i class="material-icons">menu</i>
-    </a>
-    <ul>
-      <li><a class="btn-floating red"><i class="material-icons">track_changes</i></a></li>
-      <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
-      <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
-      <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
-    </ul>
-  </div>
-		
-				<footer><p>All right reserved. Template by: <a href="https://webthemez.com/admin-template/">WebThemez.com</a></p>
-				
-        
-				</footer>
+            {{ groupviews |safe }}
             </div>
             <!-- /. PAGE INNER  -->
+            <footer><p></p></footer>
         </div>
         <!-- /. PAGE WRAPPER  -->
     </div>
     <!-- /. WRAPPER  -->
     <!-- JS Scripts-->
     <!-- jQuery Js -->
-    <script src="/static/js/jquery-1.10.2.js"></script>
 	
 	<!-- Bootstrap Js -->
     <script src="/static/js/bootstrap.min.js"></script>
 	
 	<script src="/static/materialize/js/materialize.min.js"></script>
-    <script src="/static/js/echarts.js"></script>
+
 	
     <!-- Metis Menu Js -->
     <script src="/static/js/jquery.metisMenu.js"></script>
-    <!-- Morris Chart Js -->
-    <script src="/static/js/morris/raphael-2.1.0.min.js"></script>
-    <script src="/static/js/morris/morris.js"></script>
-	
-	
-	<script src="/static/js/easypiechart.js"></script>
-	<script src="/static/js/easypiechart-data.js"></script>
-	
-	 <script src="/static/js/Lightweight-Chart/jquery.chart.js"></script>
 	
     <!-- Custom Js -->
     <script src="/static/js/custom-scripts.js"></script>
-    <script>
-    function selectChange(dg_id,options){
-    $.ajax( {
-        type : "POST",
-        url : "{{url_for('statweb',channel=achannel, brand=acbrand, stat = acstat)}}",
-        dataType : "json",
-        data : {
-            "dg_id" : dg_id,
-            "options" : options
-        },
-        error: function( XMLResponse ) {
-            alert( XMLResponse.responseText )
-        },
-        success : function ( data ) {
-            return data
-        }
-    } );
-    }
-    </script>
 
 </body>
 

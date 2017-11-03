@@ -1,4 +1,4 @@
-<div class="row" id = "{{ dg_id }}">
+<div class="row" id = "d_{{ dg_id }}">
         <div class="row">
             <div class="col-sm-6">
                 <div class="dataTables_length">
@@ -12,12 +12,30 @@
                     </label>
                     {% endfor %}
                     <script>
-                        $('#{{ dg_id }} select').change(function(){
-                            var options = [];
-                            {% for selectid,optionSelect in optionSelects.items()%}
-                            options.push($('#s_{{ selectid }}').val());
-                            {% endfor %}
-                            data = selectChange({{ dg_id }},options);
+                        $('#d_{{ dg_id }} select').change(function(){
+                                var options = [];
+                                {% for selectid,optionSelect in optionSelects.items()%}
+                                options.push($('#s_{{ selectid }}').val());
+                                {% endfor %}
+                                var dg_id = "{{ dg_id }}";
+                                 $.ajax( {
+                                type : "POST",
+                                url : window.location.pathname ,
+                                dataType : "json",
+                                data : {
+                                    "dg_id" : dg_id,
+                                    "options" :options
+                                },
+                                error: function( XMLResponse ) {
+                                    alert( XMLResponse.responseText )
+                                },
+                                success : function ( data ) {
+                                    {% for chart in allcharts %}
+                                    myChart_{{ chart.chart_id }}.setOption(data["{{ chart.chart_id }}"]);
+                                    {% endfor %}
+                                }
+                            } );
+
 
                         });
                     </script>
@@ -25,8 +43,10 @@
             </div>
         </div>
     <div class="row">
+    <div class="col-sm-12">
         {% for chart in allcharts %}
-{{ chart.render_embed() }}
+{{ chart.render_embed()|safe}}
         {% endfor %}
+    </div>
     </div>
 </div>
