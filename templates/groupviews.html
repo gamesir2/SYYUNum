@@ -43,10 +43,10 @@
             </div>
         </div>
     <div class="row">
-    <div class="col-sm-12">
         {% for chart in allcharts %}
+            <div class="col-sm-6">
 {{ chart.render_embed()|safe}}
+            </div>
         {% endfor %}
-    </div>
     </div>
 </div>

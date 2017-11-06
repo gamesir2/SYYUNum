@@ -36,7 +36,7 @@ cndict = {
                         'sdt': {
                             'baseDataName': ['零售金额', '零售数量'],
                             'newDataName': '零售单价',
-                            'dataType': '/'
+                            'dataType': '{}/{}'
                         }}],
                     'options':'店仓区域名称'
                     },
@@ -76,7 +76,7 @@ cndict = {
                         'sdt': {
                             'baseDataName':['零售金额', '零售单数'],
                             'newDataName': '客单价',
-                            'dataType': '/'
+                            'dataType': '{}/{}'
                         }}],
                     'options':'店仓区域名称'
                     },
@@ -99,7 +99,7 @@ cndict = {
                             'sdt': {
                                 'baseDataName':['零售金额', '零售单数'],
                                 'newDataName': '客单价',
-                                'dataType': '/'
+                                'dataType': '{}/{}'
                             }}],
                     'options': '月份'
                     }
@@ -139,7 +139,7 @@ cndict = {
                             'sdt': {
                                 'baseDataName':['零售金额', '零售数量'],
                                 'newDataName': '零售单价',
-                                'dataType': '/'
+                                'dataType': '{}/{}'
                             }}],
                     'options': '大分类名称'
                     },
@@ -152,7 +152,7 @@ cndict = {
                             'sdt': {
                                 'baseDataName':['零售金额', '零售数量'],
                                 'newDataName': '零售单价',
-                                'dataType': '/'
+                                'dataType': '{}/{}'
                             }}],
                     'options': ['年度', '店仓区域名称','大分类名称']
                     },

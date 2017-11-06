@@ -13,10 +13,13 @@ chartType = {
     'Rank':{
         'type':'Bar',
         'option':{
-
+            'is_convert':True
         }
     },
     'Pie':{
+        'type':'Bar',
+        'option':{
 
+        }
     }
 }

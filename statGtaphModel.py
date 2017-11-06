@@ -44,7 +44,7 @@ class dataStatGraph(object):
         self._series = series
         self._category = category
         self._sDataType = sDataType
-        self._statData:ldm.dataStat = None
+        self._statData = None
         self._options = []
 
     @property
@@ -233,7 +233,6 @@ class dsgGroup(object):
         html = tmp.render(dg_id=self.dg_id,
                           optionSelects=self.optionSelects,
                           allcharts=self.allCharts
-
                           )
         return html
 

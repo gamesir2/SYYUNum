@@ -80,12 +80,10 @@ class dataStat(object):
     
     def dsCal( self , newDataName , baseDataNames , datatypes):
         evalstr = 'self._sData[newDataName]='
-        i = 0
+        ndn = []
         for baseDataName in baseDataNames :
-            evalstr += 'self._sData[\''+baseDataName +'\']'
-            if len(datatypes)>i:
-                evalstr += datatypes[i]
-            i += 1
+            ndn.append('self._sData[\''+baseDataName +'\']')
+            evalstr += datatypes.format(ndn)
         exec(evalstr)
         return self.sData
 
