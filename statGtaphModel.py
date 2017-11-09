@@ -15,7 +15,7 @@ class sDataType(object):
     def __init__(self , baseDataNames , newDataName , dataType = None ):
         self._baseDataNames = pStat.statChangeListType(baseDataNames)
         self._newDataName = newDataName
-        self._dataType = pStat.statChangeListType(dataType)
+        self._dataType = dataType
 
     @property
     def baseDataNames( self ):
@@ -84,8 +84,8 @@ class dataStatGraph(object):
         return self._categoryDict
 
     @property
-    def chart(self):
-        return self._chart
+    def mychart(self):
+        return self._mychart
 
     @property
     def options(self):
@@ -119,26 +119,18 @@ class dataStatGraph(object):
         self._chartBuild()
 
 
-
 #图形创建添加
     def _chartBuild(self):
-        isRank = False
-        xaxis_name = self.category
-        Axis = 'xAxis'
-        if self.sType == 'Bar':
-            self._chart = chartView.myBar(self.sDataType.newDataName)
-        elif self.sType == 'Line':
-            self._chart = chartView.myLine(self.sDataType.newDataName)
-        elif self.sType == 'Rank':
-            self._chart = chartView.myBar(self.sDataType.newDataName)
-            isRank = True
-            xaxis_name = None
-            Axis='yAxis'
-        gvd = self.getFirstOptionData()
-        i=0
-        for key, value in self.serieDict.items():
-            self._chart.add(key, gvd[Axis]['data'],gvd['series'][i]['data'],xaxis_name=xaxis_name,is_convert=isRank)
-            i+=1
+        self._mychart = chartView.mychart(
+            self.sType,
+            self.sDataType.newDataName,
+            pStat.dictKeysList(self._categoryDict),
+            self.category)
+
+        gfod = self.getFirstOptionData()
+        for key, value in gfod.items():
+            self._mychart.addData(key, pStat.dictValueList(value))
+
 
     def getFirstOptionData(self):
         firstOptionSelect = []
@@ -146,43 +138,34 @@ class dataStatGraph(object):
             firstOptionSelect.append(pStat.dictKeysList(optionSelect)[0])
         return self.getOptionData(firstOptionSelect)
 
+
     def getOptionData(self,optionKeys):
         optionSelect=[]
         for i in range(len(optionKeys)):
             optionSelect.append(self.optionSelects[i][optionKeys[i]])
-
-        if self.sType == 'Rank':
-            gvd = {'yAxis': {}, 'series': []}
-            l={}
+        dic = {}
+        for skey, svalue in self.serieDict.items():
+            colname = optionSelect + [svalue]
+            data = self._statData.dsSearch(colname)
+            newdata = {}
             for ckey, cvalue in self.categoryDict.items():
-                colname = optionSelect + [pStat.dictValueList(self.serieDict)[0], cvalue]
-                l.update({ckey:self._statData.dsSearch(colname)})
-            l = pStat.dictSorted(l)
-            gvd['yAxis'].update({'data':pStat.dictKeysList(l)})
-            gvd['series'].append({'name':pStat.dictKeysList(self.serieDict)[0],'data':pStat.dictValueList(l)})
-        else:
-            gvd = {'xAxis': {}, 'series': []}
-            gvd['xAxis']={'data':list(self.categoryDict.keys())}
-            for skey, svalue in self.serieDict.items():
-                dic={'name':skey}
-                l=[]
-                for ckey, cvalue in self.categoryDict.items():
-                    colname = optionSelect + [svalue , cvalue]
-                    l.append(self._statData.dsSearch(colname))
-                dic.update({'data': l})
-                gvd['series'].append(dic)
-        return gvd
+                newdata.update({ckey:data.get(cvalue)})
+            dic.update({skey:newdata})
+        return dic
 
-    def getOptionJson(self,optionSelect):
-        gvd =self.getOptionData(optionSelect)
-        return json.dumps(gvd,indent=4)
+
+    def getOptionDataForWeb(self,optionKeys):
+        god = self.getOptionData(optionKeys)
+        return self.mychart.dataChange(god)
+
 
 
     def chartRenderEmbed(self):
-        return self.chart.render_embed()
+        return self.mychart.chart.render_embed()
+
 
     def chart_id(self):
-        return self.chart.chart_id
+        return self.mychart.chart.chart_id
 
 
 
@@ -221,7 +204,7 @@ class dsgGroup(object):
         self._allCharts = []
         for dsp in self._dsgs:
             dsp.dataGet(path)
-            self._allCharts.append(dsp.chart)
+            self._allCharts.append(dsp.mychart.chart)
 
         self._optionSelects = {}
         for optionSelect in self._dsgs[0].optionSelects:
@@ -236,10 +219,10 @@ class dsgGroup(object):
                           )
         return html
 
-    def getSelectDatas(self,optionSelect):
+    def getSelectDatasForWeb(self,optionSelect):
         datadic = {}
         for dsp in self._dsgs:
-            datadic.update({dsp.chart_id():dsp.getOptionData(optionSelect)})
+            datadic.update({dsp.chart_id():dsp.getOptionDataForWeb(optionSelect)})
         return datadic
 
 
@@ -262,5 +245,5 @@ if __name__=='__main__':
     # ds.dsgs[0].chart.render()
     # print(ds.dsgs[0].chartRenderEmbed())
     # print(ds.optionSelects)
-    # print(ds.getSelectDatas(['2015']))
-    print(ds.groupViewRenderEmbed())
+    print(ds.getSelectDatasForWeb(['2015']))
+    # print(ds.groupViewRenderEmbed())
