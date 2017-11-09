@@ -66,10 +66,7 @@ class dataStat(object):
         return self._sData
     
     def dsSearch( self ,colNames):
-        try:
-            return int(pStat.statSearch(self.sData,colNames))
-        except:
-            return None
+        return pStat.statSearch(self.sData,colNames).to_dict()
 
     def dsGetLevelIndex(self , level):
         return sorted(list(set(self.sData.index.get_level_values(level))))
@@ -83,11 +80,11 @@ class dataStat(object):
         ndn = []
         for baseDataName in baseDataNames :
             ndn.append('self._sData[\''+baseDataName +'\']')
-            evalstr += datatypes.format(ndn)
+        evalstr += datatypes.format(*ndn)
         exec(evalstr)
         return self.sData
 
-    def dsLoc(self,newDataNames):
+    def dsLoc(self, newDataNames):
         self._sData = self.sData.loc[ : , newDataNames ]
         return self.sData
 
@@ -116,7 +113,8 @@ if __name__=='__main__':
     ds.dsSum(colNames , dataNames)
     # print(ds.dsCal('平均数',['零售金额','零售数量',],['/']))
     # a = pStat.statSum(bd.data , colNames , dataNames)
-    # print(ds.dsSearch([2015,1,'广州']))
-    print(ds.dsRank('零售数量'))
+    print(ds.dsSearch([2015,1]))
+    # print(ds.dsRank('零售数量'))
+    # print(ds.dsSearch([2015,1]))
     # print(ds.dsGetLevelIndex('月份'))
     # print(ds.dsLoc(['零售数量']))

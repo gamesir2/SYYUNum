@@ -18,8 +18,6 @@ chartType = {
     },
     'Pie':{
         'type':'Bar',
-        'option':{
-
-        }
+        'option':None
     }
 }

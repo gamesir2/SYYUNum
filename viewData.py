@@ -90,7 +90,7 @@ class viewNavProperty(object):
     def statViewsGetData(self, channel, stat , dg_id , options):
         for dg in self._dgs:
             if dg.dg_id == dg_id:
-                return dg.getSelectDatas(options)
+                return dg.getSelectDatasForWeb(options)
 
 if __name__ == '__main__':
     vmp = viewNavProperty()

@@ -12,7 +12,7 @@
                     </label>
                     {% endfor %}
                     <script>
-                        $('#d_{{ dg_id }} select').change(function(){
+                        var datachange_{{ dg_id }} = function(){
                                 var options = [];
                                 {% for selectid,optionSelect in optionSelects.items()%}
                                 options.push($('#s_{{ selectid }}').val());
@@ -34,10 +34,10 @@
                                     myChart_{{ chart.chart_id }}.setOption(data["{{ chart.chart_id }}"]);
                                     {% endfor %}
                                 }
-                            } );
-
-
-                        });
+                                 });
+                        };
+                        datachange_{{ dg_id }}();
+                        $('#d_{{ dg_id }} select').change(function(){datachange_{{ dg_id }}()});
                     </script>
                 </div>
             </div>

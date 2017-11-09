@@ -10,6 +10,7 @@ import os
 import json
 import datetime
 #data是pd.DataFrame类型
+
 def statSearch( data:pd.DataFrame , colNames):
     cns = statChangeListType(colNames)
     return data.xs( tuple(cns) )
@@ -101,8 +102,10 @@ def json_dumps(data, indent=0):
 if __name__=='__main__':
     df = pd.DataFrame( {'state' : ['Ohio','Ohio','Ohio','Nevada','Nevada'],
         'year' : [2000,2001,2002,2001,2002],
-        'po' : [1.5,1.7,3.6,2.4,2.9],})
+        'po' : [1.5,1.7,3.6,2.4,2.9],
+        'jd': [1, 2, 3, 4, 5],})
     print(df)
     #print(statCount(df,['state'],['year','po']))
-    print(statSort(df,'po',False))
+    print(list(df['po']/df['jd']))
+    print(df[df['po']>2])
     # print(statSort(df,'po',False))

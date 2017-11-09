@@ -1,5 +1,6 @@
 from pyecharts.chart import Chart
 from pyecharts.option import get_all_options
+import pStat
 
 class myBar(Chart):
     def __init__(self, title, subtitle='', **kwargs):
@@ -83,24 +84,57 @@ class myLine(Chart):
 
         self._config_components(**kwargs)
 
-
-
 class myPie(Chart):
     """
     <<< 饼图 >>>
     饼图主要用于表现不同类目的数据在总和中的占比。每个的弧度表示数据数量的比例。
     """
-    def __init__(self, title, subtitle = '', **kwargs):
+    def __init__(self, title, subtitle="", **kwargs):
         super(myPie, self).__init__(title, subtitle, **kwargs)
 
     def add(self, *args, **kwargs):
         self.__add(*args, **kwargs)
 
-    def __add(self, name, attr, value,
+
+    def addData(self, serisesName, value,
               radius=None,
               center=None,
               rosetype=None,
               **kwargs):
+        kwargs.update(type="pie")
+        chart = get_all_options(**kwargs)
+        assert len(self._attr) == len(value)
+        _data = []
+        for data in zip(self._attr, value):
+            _name, _value = data
+            _data.append({"name": _name, "value": _value})
+
+        _rmin, _rmax = "0%", "75%"
+        if radius:
+            if len(radius) == 2:
+                _rmin, _rmax = ["{}%".format(r) for r in radius]
+
+        _cmin, _cmax = "50%", "50%"
+        if center:
+            if len(center) == 2:
+                _cmin, _cmax = ["{}%".format(c) for c in center]
+
+        if rosetype:
+            if rosetype not in ("radius", "area"):
+                rosetype = "radius"
+
+        self._option.get('series').append({
+            "type": "pie",
+            "name": serisesName,
+            "data": _data,
+            "radius": [_rmin, _rmax],
+            "center": [_cmin, _cmax],
+            "roseType": rosetype,
+            "label": chart['label'],
+            "seriesId": self._option.get('series_id'),
+        })
+
+    def __add(self, attr, **kwargs):
         """
         :param name:
             系列名称，用于 tooltip 的显示，legend 的图例筛选。
@@ -122,26 +156,7 @@ class myPie(Chart):
         :param kwargs:
         """
         kwargs.update(type="pie")
-        chart = get_all_options(**kwargs)
-        assert len(attr) == len(value)
-        _data = []
-        for data in zip(attr, value):
-            _name, _value = data
-            _data.append({"name": _name, "value": _value})
-
-        _rmin, _rmax = "0%", "75%"
-        if radius:
-            if len(radius) == 2:
-                _rmin, _rmax = ["{}%".format(r) for r in radius]
-
-        _cmin, _cmax = "50%", "50%"
-        if center:
-            if len(center) == 2:
-                _cmin, _cmax = ["{}%".format(c) for c in center]
-
-        if rosetype:
-            if rosetype not in ("radius", "area"):
-                rosetype = "radius"
+        self._attr = attr
 
         for a in attr:
             self._option.get('legend')[0].get('data').append(a)
@@ -151,14 +166,43 @@ class myPie(Chart):
         _dset.sort(key=_dlst.index)
         self._option.get('legend')[0].update(data=list(_dset))
 
-        self._option.get('series').append({
-            "type": "pie",
-            "name": name,
-            "data": _data,
-            "radius": [_rmin, _rmax],
-            "center": [_cmin, _cmax],
-            "roseType": rosetype,
-            "label": chart['label'],
-            "seriesId": self._option.get('series_id'),
-        })
         self._config_components(**kwargs)
+
+class mychart(object):
+    def __init__(self, sType , title , attr , category_name):
+        self._sType = sType
+        self._title = title
+        self._attr = attr
+        self._category_name = category_name
+        self.chartBulid()
+
+    @property
+    def chart(self):
+        return self._chart
+
+    def chartBulid(self):
+        if self._sType == 'Bar':
+            self._chart = myBar(self._title)
+            self._chart.add(self._attr, xaxis_name=self._category_name)
+        elif self._sType == 'Line':
+            self._chart = myLine(self._title)
+            self._chart.add(self._attr, xaxis_name=self._category_name)
+        elif self._sType == 'Rank':
+            self._chart = myBar(self._title)
+            self._chart.add(self._attr,is_convert=True)
+        elif self._sType == 'Pie':
+            self._chart = myPie(self._title)
+            self._chart.add(self._attr)
+
+    def dataChange(self , data:dict):
+        gvd = { 'series': []}
+        for dkey, dvalue in data.items():
+            value = dvalue
+            if self._sType == 'Rank':
+                value = pStat.dictSorted(dvalue)
+                gvd.update({'yAxis': {'data': pStat.dictKeysList(value)}})
+            gvd['series'].append({'name':dkey,'data':pStat.dictValueList(value)})
+        return gvd
+
+    def addData(self, serisesName, value, **kwargs):
+        self._chart.addData(serisesName, value, **kwargs)
