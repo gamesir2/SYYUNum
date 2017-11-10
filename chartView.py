@@ -201,7 +201,13 @@ class mychart(object):
             if self._sType == 'Rank':
                 value = pStat.dictSorted(dvalue)
                 gvd.update({'yAxis': {'data': pStat.dictKeysList(value)}})
-            gvd['series'].append({'name':dkey,'data':pStat.dictValueList(value)})
+            data=[]
+            for x in pStat.dictValueList(value):
+                if x:
+                    data.append(int(x))
+                else:
+                    data.append(x)
+            gvd['series'].append({'name':dkey,'data':data})
         return gvd
 
     def addData(self, serisesName, value, **kwargs):

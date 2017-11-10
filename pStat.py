@@ -13,7 +13,11 @@ import datetime
 
 def statSearch( data:pd.DataFrame , colNames):
     cns = statChangeListType(colNames)
-    return data.xs( tuple(cns) )
+    try:
+        da = data.xs(tuple(cns))
+        return da.to_dict()
+    except:
+        return {}
 
 def statSum( data:pd.DataFrame , colNames , dataNames ):
     cns = statChangeListType(colNames)

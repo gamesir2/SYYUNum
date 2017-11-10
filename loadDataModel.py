@@ -66,7 +66,7 @@ class dataStat(object):
         return self._sData
     
     def dsSearch( self ,colNames):
-        return pStat.statSearch(self.sData,colNames).to_dict()
+        return pStat.statSearch(self.sData,colNames)
 
     def dsGetLevelIndex(self , level):
         return sorted(list(set(self.sData.index.get_level_values(level))))

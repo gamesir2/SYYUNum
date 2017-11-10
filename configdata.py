@@ -148,11 +148,11 @@ cndict = {
                             'datadir': '小类.xlsx',
                             'stype': 'Rank',
                             'serise': None,
-                            'category': '店仓区域名称',
+                            'category': '小分类名称',
                             'sdt': {
-                                'baseDataName':['零售金额', '零售数量'],
-                                'newDataName': '零售单价',
-                                'dataType': '{}/{}'
+                                'baseDataName':['零售金额'],
+                                'newDataName': '销售额',
+                                'dataType': None
                             }}],
                     'options': ['年度', '店仓区域名称','大分类名称']
                     },
