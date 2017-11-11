@@ -74,7 +74,7 @@ class viewNavProperty(object):
         for dsgdata in statdata['dsg']:
             dsg=stat.dataStatGraph(
                 dsgdata.get('datadir'),
-                dsgdata.get('stype'),
+                dsgdata.get('ctype'),
                 dsgdata.get('serise'),
                 dsgdata.get('category'),
                 stat.sDataType(

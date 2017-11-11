@@ -70,6 +70,15 @@ def dictSorted(dic:dict,reverse=False):
         newdic.update({i[0]:i[1]})
     return newdic
 
+def dictIntValue(dic:dict):
+    newdic ={}
+    for key,value in dic.items():
+        if value == None:
+            newdic.update({key: value})
+        else:
+            newdic.update({key: int(value)})
+    return newdic
+
 def dictKeysList(dic:dict):
     return list(dic.keys())
 

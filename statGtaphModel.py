@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import loadDataModel as ldm
 import pStat
-import json
 import chartView
 import uuid
 '''
@@ -32,15 +31,15 @@ class sDataType(object):
 '''
 dataStatGraph类属性解析（）:
     datadir：数据地址(str)
-    stype：视图类型(str) (Bar:柱状图 Line:折线图 Pie:饼状图 Rank:排行榜)
+    ctype：视图类型(str) (Bar:柱状图 Line:折线图 Pie:饼状图 Rank:排行榜)
     series：视图系列(str)
     category：视图类别(str)
     sdatatype：视图数据类型(sdataType)
 '''
 class dataStatGraph(object):
-    def __init__(self , dataDir, sType , series , category , sDataType:sDataType):
+    def __init__(self , dataDir, cType , series , category , sDataType:sDataType):
         self._dataDir = dataDir
-        self._sType = sType
+        self._cType = cType
         self._series = series
         self._category = category
         self._sDataType = sDataType
@@ -52,8 +51,8 @@ class dataStatGraph(object):
         return self._dataDir
 
     @property
-    def sType( self ):
-        return self._sType
+    def cType( self ):
+        return self._cType
 
     @property
     def series( self ):
@@ -98,7 +97,7 @@ class dataStatGraph(object):
     def dataGet(self,path):
         sdt = self.sDataType
         self._statData = ldm.dataStat(path, self.dataDir)
-        if self.sType == 'Rank' or bool(self.series) == False :
+        if self.cType == 'Rank' or bool(self.series) == False :
             self._series = 'All'
             self._statData.bData.data[self.series] = self.sDataType.newDataName
         colNames = self.options + [self.series, self.category]
@@ -122,7 +121,7 @@ class dataStatGraph(object):
 #图形创建添加
     def _chartBuild(self):
         self._mychart = chartView.mychart(
-            self.sType,
+            self.cType,
             self.sDataType.newDataName,
             pStat.dictKeysList(self._categoryDict),
             self.category)
@@ -154,10 +153,9 @@ class dataStatGraph(object):
         return dic
 
 
-    def getOptionDataForWeb(self,optionKeys):
+    def getOptionDataForWeb(self, optionKeys):
         god = self.getOptionData(optionKeys)
         return self.mychart.dataChange(god)
-
 
 
     def chartRenderEmbed(self):
@@ -215,7 +213,8 @@ class dsgGroup(object):
         tmp = pStat.JINJA2_ENV.get_template(embed)
         html = tmp.render(dg_id=self.dg_id,
                           optionSelects=self.optionSelects,
-                          allcharts=self.allCharts
+                          allcharts=self.allCharts,
+                          ctype=self.dsgs[0].cType
                           )
         return html
 

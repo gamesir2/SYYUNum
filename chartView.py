@@ -169,8 +169,8 @@ class myPie(Chart):
         self._config_components(**kwargs)
 
 class mychart(object):
-    def __init__(self, sType , title , attr , category_name):
-        self._sType = sType
+    def __init__(self, cType , title , attr , category_name):
+        self._cType = cType
         self._title = title
         self._attr = attr
         self._category_name = category_name
@@ -181,33 +181,39 @@ class mychart(object):
         return self._chart
 
     def chartBulid(self):
-        if self._sType == 'Bar':
+        if self._cType == 'Bar':
             self._chart = myBar(self._title)
             self._chart.add(self._attr, xaxis_name=self._category_name)
-        elif self._sType == 'Line':
+        elif self._cType == 'Line':
             self._chart = myLine(self._title)
             self._chart.add(self._attr, xaxis_name=self._category_name)
-        elif self._sType == 'Rank':
+        elif self._cType == 'Rank':
             self._chart = myBar(self._title)
             self._chart.add(self._attr,is_convert=True)
-        elif self._sType == 'Pie':
+        elif self._cType == 'Pie':
             self._chart = myPie(self._title)
             self._chart.add(self._attr)
 
     def dataChange(self , data:dict):
         gvd = { 'series': []}
         for dkey, dvalue in data.items():
-            value = dvalue
-            if self._sType == 'Rank':
-                value = pStat.dictSorted(dvalue)
-                gvd.update({'yAxis': {'data': pStat.dictKeysList(value)}})
-            data=[]
-            for x in pStat.dictValueList(value):
-                if x:
-                    data.append(int(x))
-                else:
-                    data.append(x)
-            gvd['series'].append({'name':dkey,'data':data})
+            value = pStat.dictIntValue(dvalue)
+            if self._cType == 'Rank':
+                value = pStat.dictSorted(value)
+                ydata = pStat.dictKeysList(value)
+                sdata = pStat.dictValueList(value)
+                if len(value)>15:
+                    ydata = ydata[-15:]
+                    sdata = sdata[-15:]
+                gvd.update({'yAxis': {'data':ydata}})
+                gvd['series'].append({'name': dkey, 'data': sdata})
+            elif self._cType == 'Pie':
+                pieData = []
+                for pkey, pvlaue in value.items():
+                    pieData.append({"name": pkey, "value": pvlaue})
+                gvd['series'].append({'name': dkey, 'data': pieData})
+            else:
+                gvd['series'].append({'name': dkey, 'data': pStat.dictValueList(value)})
         return gvd
 
     def addData(self, serisesName, value, **kwargs):

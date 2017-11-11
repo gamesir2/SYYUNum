@@ -20,7 +20,7 @@ cndict = {
                 'view':[{
                     'dsg':[{
                         'datadir':'小类.xlsx',
-                        'stype':'Line',
+                        'ctype':'Line',
                         'serise':'年度',
                         'category':'月份',
                         'sdt':{
@@ -30,7 +30,7 @@ cndict = {
                             }},
                         {
                         'datadir': '小类.xlsx',
-                        'stype': 'Line',
+                        'ctype': 'Line',
                         'serise': '年度',
                         'category': '月份',
                         'sdt': {
@@ -43,7 +43,7 @@ cndict = {
                     {
                     'dsg':[{
                         'datadir': '小类.xlsx',
-                        'stype': 'Rank',
+                        'ctype': 'Rank',
                         'serise': None,
                         'category': '店仓区域名称',
                         'sdt': {
@@ -60,7 +60,7 @@ cndict = {
                 'view':[{
                     'dsg':[{
                         'datadir':'客户.xlsx',
-                        'stype':'Line',
+                        'ctype':'Line',
                         'serise':'年度',
                         'category':'月份',
                         'sdt':{
@@ -70,7 +70,7 @@ cndict = {
                             }},
                         {
                         'datadir': '客户.xlsx',
-                        'stype': 'Line',
+                        'ctype': 'Line',
                         'serise': '年度',
                         'category': '月份',
                         'sdt': {
@@ -83,7 +83,7 @@ cndict = {
                     {
                     'dsg': [{
                         'datadir': '客户.xlsx',
-                        'stype': 'Bar',
+                        'ctype': 'Bar',
                         'serise': '年度',
                         'category': '店仓区域名称',
                         'sdt': {
@@ -93,7 +93,7 @@ cndict = {
                         }},
                         {
                             'datadir': '客户.xlsx',
-                            'stype': 'Bar',
+                            'ctype': 'Bar',
                             'serise': '年度',
                             'category': '店仓区域名称',
                             'sdt': {
@@ -110,7 +110,7 @@ cndict = {
                 'view':[{
                     'dsg':[{
                         'datadir':'小类.xlsx',
-                        'stype':'Pie',
+                        'ctype':'Pie',
                         'serise':'店仓区域名称',
                         'category':'大分类名称',
                         'sdt':{
@@ -120,7 +120,7 @@ cndict = {
                             }},
                         {
                         'datadir': '小类.xlsx',
-                        'stype': 'Pie',
+                        'ctype': 'Pie',
                         'serise': '店仓区域名称',
                         'category': '大分类名称',
                         'sdt': {
@@ -132,28 +132,28 @@ cndict = {
                     },
                     {
                     'dsg': [{
-                            'datadir': '小类.xlsx',
-                            'stype': 'Bar',
-                            'serise': '年度',
-                            'category': '店仓区域名称',
-                            'sdt': {
-                                'baseDataName':['零售金额', '零售数量'],
-                                'newDataName': '零售单价',
-                                'dataType': '{}/{}'
-                            }}],
+                        'datadir': '小类.xlsx',
+                        'ctype': 'Bar',
+                        'serise': '年度',
+                        'category': '店仓区域名称',
+                        'sdt': {
+                            'baseDataName':['零售金额', '零售数量'],
+                            'newDataName': '零售单价',
+                            'dataType': '{}/{}'
+                        }}],
                     'options': '大分类名称'
                     },
                     {
                     'dsg': [{
-                            'datadir': '小类.xlsx',
-                            'stype': 'Rank',
-                            'serise': None,
-                            'category': '小分类名称',
-                            'sdt': {
-                                'baseDataName':['零售金额'],
-                                'newDataName': '销售额',
-                                'dataType': None
-                            }}],
+                        'datadir': '小类.xlsx',
+                        'ctype': 'Rank',
+                        'serise': None,
+                        'category': '小分类名称',
+                        'sdt': {
+                            'baseDataName':['零售金额'],
+                            'newDataName': '销售额',
+                            'dataType': None
+                        }}],
                     'options': ['年度', '店仓区域名称','大分类名称']
                     },
                 ]
@@ -163,7 +163,7 @@ cndict = {
                 'view':[{
                     'dsg':[{
                         'datadir':'波段.xlsx',
-                        'stype':'Bar',
+                        'ctype':'Bar',
                         'serise':'季节名称',
                         'category':'月份',
                         'sdt':{
@@ -173,7 +173,7 @@ cndict = {
                             }},
                         {
                         'datadir': '波段.xlsx',
-                        'stype': '%Bar',
+                        'ctype': 'Bar',
                         'serise': '季节名称',
                         'category': '月份',
                         'sdt': {
@@ -190,7 +190,7 @@ cndict = {
                 'view': [{
                     'dsg': [{
                         'datadir': '尺码.xlsx',
-                        'stype': 'Pie',
+                        'ctype': 'Rank',
                         'serise': '大分类名称',
                         'category': '尺码名称',
                         'sdt': {
@@ -199,15 +199,15 @@ cndict = {
                             'dataType': None
                         }},
                         {
-                            'datadir': '颜色.xlsx',
-                            'stype': 'Pie',
-                            'serise': '大分类名称',
-                            'category': '颜色名称',
-                            'sdt': {
-                                'baseDataName': ['零售数量'],
-                                'newDataName': '销售量',
-                                'dataType': None
-                            }}],
+                        'datadir': '颜色.xlsx',
+                        'ctype': 'Rank',
+                        'serise': '大分类名称',
+                        'category': '颜色名称',
+                        'sdt': {
+                            'baseDataName': ['零售数量'],
+                            'newDataName': '销售量',
+                            'dataType': None
+                        }}],
                     'options': ['年度', '店仓区域名称']
                     }
                 ]

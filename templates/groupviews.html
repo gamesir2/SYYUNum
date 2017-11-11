@@ -12,7 +12,7 @@
                     </label>
                     {% endfor %}
                     <script>
-                        $('#d_{{ dg_id }} select').change(function(){
+                        var dataChange_{{ dg_id }} = function(){
                                 var options = [];
                                 {% for selectid,optionSelect in optionSelects.items()%}
                                 options.push($('#s_{{ selectid }}').val());
@@ -35,7 +35,11 @@
                                     {% endfor %}
                                 }
                                  });
-                        });
+                        }
+                        {% if ctype == 'Rank' %}
+                        dataChange_{{ dg_id }}();
+                        {% endif %}
+                        $('#d_{{ dg_id }} select').change(dataChange_{{ dg_id }});
                     </script>
                 </div>
             </div>
