@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import statGtaphModel as sgm
+import os
 
 
 sdt = sgm.sDataType
 dsg = sgm.dataStatGraph
 dg = sgm.dsgGroup
 
-path = r'C:\Users\xbproj02\Desktop'
+path = r'D:\PycharmProjects\SYYUNum\baseData'
 cndict = {
     'ZYXS':{
         'name':'直营销售分析',
